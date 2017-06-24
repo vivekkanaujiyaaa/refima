@@ -1,7 +1,10 @@
 package server
 
-import "github.com/gorilla/mux"
-import "github.com/PumpkinSeed/refima/api/handlers"
+import (
+	"github.com/PumpkinSeed/refima/api/handlers"
+	"github.com/PumpkinSeed/refima/api/middleware"
+	"github.com/gorilla/mux"
+)
 
 type RouteStack struct {
 	Handlers *handlers.Stack
@@ -15,8 +18,9 @@ func NewRouteStack() *RouteStack {
 
 func (s *RouteStack) getRoutes() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", s.Handlers.Root).Methods("GET")
-	r.HandleFunc("/health-check", s.Handlers.HealtCheck).Methods("GET")
+
+	r.HandleFunc("/", middleware.Authenticate()(s.Handlers.Root)).Methods("GET")
+	r.HandleFunc("/health-check", middleware.Authenticate()(s.Handlers.HealtCheck)).Methods("GET")
 	return r
 }
 
