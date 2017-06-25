@@ -3,6 +3,7 @@
     "listening": ":8011",
     "log_file": "./refima.log",
     "database": {
+        "dialect": "mysql",
         "host": "",
         "username": "",
         "password": "",
