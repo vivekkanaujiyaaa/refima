@@ -6,6 +6,7 @@ import (
 
 	"github.com/PumpkinSeed/refima/api/server"
 	"github.com/PumpkinSeed/refima/config"
+	"github.com/PumpkinSeed/refima/database"
 	logging "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -32,6 +33,21 @@ func main() {
 				},
 			},
 		},
+		{
+			Name:  "migrate",
+			Usage: "Migrating the database",
+			Action: func(c *cli.Context) error {
+				return Migrate(path)
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:        "config, c",
+					Value:       "./config.json",
+					Usage:       "Load configuration from `FILE`",
+					Destination: &path,
+				},
+			},
+		},
 	}
 
 	app.Run(os.Args)
@@ -48,6 +64,24 @@ func RunServer(configPath string) error {
 	}
 	s := server.New(conf, log)
 	s.Start()
+	return nil
+}
+
+func Migrate(configPath string) error {
+	log := getLogger()
+	log.Info("Refima - Remote file manager")
+	conf, err := config.Get(configPath)
+	if err != nil {
+		log.Errorf("Load config file failed -> %s", err.Error())
+		os.Exit(0)
+		return err
+	}
+	err = database.Migrate(conf)
+	if err != nil {
+		log.Errorf("Load config file failed -> %s", err.Error())
+		os.Exit(0)
+		return err
+	}
 	return nil
 }
 

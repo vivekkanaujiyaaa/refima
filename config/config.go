@@ -13,10 +13,8 @@ type Config struct {
 }
 
 type Database struct {
-	Host     string `json:"host"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Database string `json:"database"`
+	Dialect    string `json:"dialect"`
+	Connection string `json:"connection"`
 }
 
 func Get(path string) (Config, error) {
