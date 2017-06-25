@@ -6,15 +6,15 @@ import (
 
 	"github.com/PumpkinSeed/refima/config"
 	"github.com/labstack/gommon/log"
-	logging "github.com/op/go-logging"
+	logging "github.com/sirupsen/logrus"
 )
 
 type Server struct {
 	Config config.Config
-	Log    *logging.Logger
+	Log    *logging.Entry
 }
 
-func New(c config.Config, l *logging.Logger) *Server {
+func New(c config.Config, l *logging.Entry) *Server {
 	s := new(Server)
 	s.Config = c
 	s.Log = l

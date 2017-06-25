@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/PumpkinSeed/refima/api/server"
 	"github.com/PumpkinSeed/refima/config"
-	logging "github.com/op/go-logging"
+	logging "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -50,14 +51,16 @@ func RunServer(configPath string) error {
 	return nil
 }
 
-func getLogger() *logging.Logger {
-	var log = logging.MustGetLogger("refima")
-	var format = logging.MustStringFormatter(
-		`%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.4s} %{id:03x}%{color:reset} %{message}`,
-	)
-	backend := logging.NewLogBackend(os.Stderr, "", 0)
-	backendFormatter := logging.NewBackendFormatter(backend, format)
-	logging.SetBackend(backendFormatter)
+func getLogger() *logging.Entry {
+	f, err := os.OpenFile("refima.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Printf("error opening file: %v", err)
+	}
+	logging.SetFormatter(&logging.JSONFormatter{})
+	logging.SetOutput(f)
+	logging.SetLevel(logging.InfoLevel)
 
-	return log
+	return logging.WithFields(logging.Fields{
+		"service": "refima",
+	})
 }
