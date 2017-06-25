@@ -23,7 +23,7 @@ func NewOperationHandler(conf config.Config) (Operation, error) {
 }
 
 func (o *Operation) NewUser(name, password string) error {
-	g := tuid.NewGenerator(5, true, false)
+	g := tuid.NewGenerator(10, true, false)
 	id, err := g.New()
 	if err != nil {
 		return err
