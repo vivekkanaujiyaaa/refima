@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/PumpkinSeed/refima/config"
+	"github.com/PumpkinSeed/tuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -19,4 +20,34 @@ func NewOperationHandler(conf config.Config) (Operation, error) {
 		Conf: conf,
 		DB:   db,
 	}, nil
+}
+
+func (o *Operation) NewUser(name, password string) error {
+	g := tuid.NewGenerator(5, true, false)
+	id, err := g.New()
+	if err != nil {
+		return err
+	}
+	ePassword, err := HashPasswordForClient(password)
+	if err != nil {
+		return err
+	}
+	user := User{
+		ID:       id,
+		Name:     "test",
+		Password: string(ePassword),
+	}
+	o.DB.Create(&user)
+}
+
+func (o *Operation) NewUserUID(u UserUID) {
+	o.DB.Create(&u)
+}
+
+func (o *Operation) NewUserGID(u UserGID) {
+	o.DB.Create(&u)
+}
+
+func (o *Operation) NewAccessToken(a AccessToken) {
+	o.DB.Create(&a)
 }

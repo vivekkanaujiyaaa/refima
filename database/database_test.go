@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/PumpkinSeed/refima/config"
+	"github.com/PumpkinSeed/tuid"
 	mocket "github.com/Selvatico/go-mocket"
 )
 
@@ -21,5 +22,12 @@ func init() {
 }
 
 func TestNewUser(t *testing.T) {
-
+	g := tuid.NewGenerator(5, true, false)
+	id, _ := g.New()
+	user := User{
+		ID:       id,
+		Name:     "test",
+		Password: "test",
+	}
+	operation.NewUser(user)
 }
