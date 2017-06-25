@@ -50,9 +50,40 @@ func TestGetUser(t *testing.T) {
 	user := User{
 		Name: "test",
 	}
-	result := operation.GetUser(user)
+	result, err := operation.GetUser(user)
+	if err != nil {
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
+	}
 	if len(result.ID) < 20 {
 		t.Errorf(`The userID should be bigger than 20, instead of %d`, len(result.ID))
 	}
-	fmt.Println(len(result.ID))
+	fmt.Println(result)
+}
+
+func TestUpdateUser(t *testing.T) {
+	user := User{
+		Name: "test",
+	}
+	result, err := operation.GetUser(user)
+	if err != nil {
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
+	}
+	result.Name = "after_test"
+	result.Password = "after_test"
+	operation.UpdateUser(result)
+	userAfterUpdate := User{
+		ID: result.ID,
+	}
+	resultAfterUpdate, err := operation.GetUser(userAfterUpdate)
+	if err != nil {
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
+	}
+	if resultAfterUpdate.Name != "after_test" {
+		t.Errorf(`The user name should be "after_test", instead of %s`, resultAfterUpdate.Name)
+	}
+	accessToken, err := operation.Authorization("after_test", "after_test")
+	if err != nil {
+
+	}
+	fmt.Println(accessToken)
 }

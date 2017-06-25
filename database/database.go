@@ -1,6 +1,8 @@
 package database
 
 import (
+	"strings"
+
 	"github.com/PumpkinSeed/refima/config"
 	"github.com/PumpkinSeed/tuid"
 	"github.com/jinzhu/gorm"
@@ -41,10 +43,35 @@ func (o *Operation) NewUser(name, password string) error {
 	return nil
 }
 
-func (o *Operation) GetUser(u User) User {
+func (o *Operation) GetUser(u User) (User, error) {
 	user := User{}
-	o.DB.Where(&u).First(&user)
-	return user
+	err := o.DB.Where(&u).First(&user).Error
+	return user, err
+}
+
+func (o *Operation) UpdateUser(u User) error {
+	if !strings.Contains(u.Password, "$2a") {
+		ePassword, err := HashPasswordForClient(u.Password)
+		if err != nil {
+			return err
+		}
+		u.Password = string(ePassword)
+	}
+	o.DB.Save(&u)
+	return nil
+}
+
+func (o *Operation) Authorization(name, password string) (AccessToken, error) {
+	user, err := o.GetUser(User{
+		Name: name,
+	})
+	if err != nil {
+		return AccessToken{}, err
+	}
+	if err := VerifyPasswordForClient(user.Password, password); err != nil {
+		return AccessToken{}, err
+	}
+	return AccessToken{}, nil
 }
 
 func (o *Operation) NewUserUID(userID, uid string) {
