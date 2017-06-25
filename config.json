@@ -1,4 +1,11 @@
 {
     "test": "test",
-    "listening": ":8011"
+    "listening": ":8011",
+    "log_file": "./refima.log",
+    "database": {
+        "host": "",
+        "username": "",
+        "password": "",
+        "database": ""
+    }
 }
