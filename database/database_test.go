@@ -1,33 +1,39 @@
 package database
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/PumpkinSeed/refima/config"
-	"github.com/PumpkinSeed/tuid"
-	mocket "github.com/Selvatico/go-mocket"
 )
 
 var operation Operation
 
-func init() {
-	mocket.Catcher.Register()
+func TestOpenDB(t *testing.T) {
 	conf := config.Config{
 		Database: config.Database{
-			Connection: "RANDOM_STRING",
-			Dialect:    mocket.DRIVER_NAME,
+			Connection: "./test.db",
+			Dialect:    "sqlite3",
 		},
 	}
-	operation, _ = NewOperationHandler(conf)
+	var err error
+	operation, err = NewOperationHandler(conf)
+	if err != nil {
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
+	}
 }
 
 func TestNewUser(t *testing.T) {
-	g := tuid.NewGenerator(5, true, false)
-	id, _ := g.New()
-	user := User{
-		ID:       id,
-		Name:     "test",
-		Password: "test",
+	err := operation.NewUser("test", "test")
+	if err != nil {
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
 	}
-	operation.NewUser(user)
+}
+
+func TestGetUser(t *testing.T) {
+	user := User{
+		Name: "test",
+	}
+	result := operation.GetUser(user)
+	fmt.Println(result)
 }

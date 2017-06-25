@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/PumpkinSeed/refima/api/server"
+	"github.com/PumpkinSeed/refima/api"
 	"github.com/PumpkinSeed/refima/config"
 	"github.com/PumpkinSeed/refima/database"
 	logging "github.com/sirupsen/logrus"
@@ -54,7 +54,7 @@ func main() {
 }
 
 func RunServer(configPath string) error {
-	log := getLogger()
+	log := GetLogger()
 	log.Info("Refima - Remote file manager")
 	conf, err := config.Get(configPath)
 	if err != nil {
@@ -62,13 +62,12 @@ func RunServer(configPath string) error {
 		os.Exit(0)
 		return err
 	}
-	s := server.New(conf, log)
-	s.Start()
+	api.Start(conf, log)
 	return nil
 }
 
 func Migrate(configPath string) error {
-	log := getLogger()
+	log := GetLogger()
 	log.Info("Refima - Remote file manager")
 	conf, err := config.Get(configPath)
 	if err != nil {
@@ -85,7 +84,7 @@ func Migrate(configPath string) error {
 	return nil
 }
 
-func getLogger() *logging.Entry {
+func GetLogger() *logging.Entry {
 	f, err := os.OpenFile("refima.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Printf("error opening file: %v", err)

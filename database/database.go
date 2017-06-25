@@ -38,13 +38,28 @@ func (o *Operation) NewUser(name, password string) error {
 		Password: string(ePassword),
 	}
 	o.DB.Create(&user)
+	return nil
 }
 
-func (o *Operation) NewUserUID(u UserUID) {
+func (o *Operation) GetUser(u User) User {
+	user := User{}
+	o.DB.Where(&u).First(&user)
+	return user
+}
+
+func (o *Operation) NewUserUID(userID, uid string) {
+	u := UserUID{
+		UserID: userID,
+		UID:    uid,
+	}
 	o.DB.Create(&u)
 }
 
-func (o *Operation) NewUserGID(u UserGID) {
+func (o *Operation) NewUserGID(userID, gid string) {
+	u := UserGID{
+		UserID: userID,
+		GID:    gid,
+	}
 	o.DB.Create(&u)
 }
 

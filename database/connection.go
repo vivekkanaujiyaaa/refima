@@ -12,5 +12,7 @@ import (
 func connection(conf config.Config) (*gorm.DB, error) {
 	d := conf.Database
 
-	return gorm.Open(d.Dialect, d.Connection)
+	db, err := gorm.Open(d.Dialect, d.Connection)
+	db.LogMode(conf.DebugMode)
+	return db, err
 }
