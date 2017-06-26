@@ -2,9 +2,11 @@ package database
 
 import (
 	"strings"
+	"time"
 
 	"github.com/PumpkinSeed/refima/config"
 	"github.com/PumpkinSeed/tuid"
+	"github.com/RichardKnop/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -71,7 +73,7 @@ func (o *Operation) Authorization(name, password string) (AccessToken, error) {
 	if err := VerifyPasswordForClient(user.Password, password); err != nil {
 		return AccessToken{}, err
 	}
-	return AccessToken{}, nil
+	return o.NewAccessToken(user.ID)
 }
 
 func (o *Operation) NewUserUID(userID, uid string) {
@@ -90,6 +92,18 @@ func (o *Operation) NewUserGID(userID, gid string) {
 	o.DB.Create(&u)
 }
 
-func (o *Operation) NewAccessToken(a AccessToken) {
+func (o *Operation) NewAccessToken(userID string) (AccessToken, error) {
+	a := AccessToken{
+		UserID:    userID,
+		Token:     uuid.New(),
+		ExpiresAt: time.Now().Add(time.Hour * time.Duration(10)),
+	}
 	o.DB.Create(&a)
+	return o.GetAccessToken(a)
+}
+
+func (o *Operation) GetAccessToken(a AccessToken) (AccessToken, error) {
+	accessToken := AccessToken{}
+	err := o.DB.Where(&a).First(&accessToken).Error
+	return accessToken, err
 }

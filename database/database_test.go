@@ -24,6 +24,23 @@ func init() {
 	}
 }
 
+func TestOpenDBError(t *testing.T) {
+	confError := config.Config{
+		Database: config.Database{
+			Connection: "RANDOM",
+			Dialect:    "mysql",
+		},
+	}
+	_, err := NewOperationHandler(confError)
+	if err == nil {
+		t.Errorf(`Error should be an error message, instead of %s`, err.Error())
+	}
+	err = Migrate(confError)
+	if err == nil {
+		t.Errorf(`Error should be an error message, instead of %s`, err.Error())
+	}
+}
+
 func TestOpenDB(t *testing.T) {
 	var err error
 	operation, err = NewOperationHandler(conf)
@@ -83,7 +100,21 @@ func TestUpdateUser(t *testing.T) {
 	}
 	accessToken, err := operation.Authorization("after_test", "after_test")
 	if err != nil {
-
+		t.Errorf(`Error should be nil, instead of %s`, err.Error())
 	}
 	fmt.Println(accessToken)
+}
+
+func TestAuthorizeNonExistedUser(t *testing.T) {
+	_, err := operation.Authorization("nouser", "nouser")
+	if err == nil {
+		t.Errorf(`Error should be "record not found", instead of %s`, err.Error())
+	}
+}
+
+func TestAuthorizeUserWithBadPassword(t *testing.T) {
+	_, err := operation.Authorization("after_test", "nouser")
+	if err == nil && err.Error() != "crypto/bcrypt: hashedPassword is not the hash of the given password" {
+		t.Errorf(`Error should be "crypto/bcrypt: hashedPassword is not the hash of the given password", instead of %s`, err.Error())
+	}
 }
