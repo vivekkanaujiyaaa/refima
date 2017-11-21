@@ -10,6 +10,15 @@ import (
 	"github.com/xalabs/refima/config"
 )
 
+type Operations interface {
+	NewConnection(conf config.Config) Handler
+}
+
+type Handler struct {
+	Conf config.Config
+	DB   *gorm.DB
+}
+
 type Operation struct {
 	Conf config.Config
 	DB   *gorm.DB

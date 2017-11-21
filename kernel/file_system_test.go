@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/PumpkinSeed/refima/config"
+	"github.com/xalabs/refima/config"
 )
 
 var kernel *Kernel
