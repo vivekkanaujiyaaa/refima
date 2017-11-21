@@ -1,6 +1,6 @@
 package database
 
-import "github.com/PumpkinSeed/refima/config"
+import "github.com/xalabs/refima/config"
 
 func Migrate(conf config.Config) error {
 	db, err := connection(conf)

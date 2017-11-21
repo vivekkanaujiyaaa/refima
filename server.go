@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/PumpkinSeed/refima/api"
-	"github.com/PumpkinSeed/refima/config"
-	"github.com/PumpkinSeed/refima/database"
 	logging "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+	"github.com/xalabs/refima/api"
+	"github.com/xalabs/refima/config"
+	"github.com/xalabs/refima/database"
 )
 
 var path string

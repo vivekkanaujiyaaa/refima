@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/PumpkinSeed/refima/config"
+	"github.com/xalabs/refima/config"
 )
 
 var operation Operation

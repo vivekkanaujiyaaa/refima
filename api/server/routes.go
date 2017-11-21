@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/PumpkinSeed/refima/api/handlers"
-	"github.com/PumpkinSeed/refima/api/middleware"
 	"github.com/gorilla/mux"
+	"github.com/xalabs/refima/api/handlers"
+	"github.com/xalabs/refima/api/middleware"
 )
 
 type RouteStack struct {

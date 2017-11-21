@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/PumpkinSeed/refima/api/auth"
+	"github.com/xalabs/refima/api/auth"
 )
 
 type Adapter func(http.HandlerFunc) http.HandlerFunc

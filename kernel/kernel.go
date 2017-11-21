@@ -1,6 +1,6 @@
 package kernel
 
-import "github.com/PumpkinSeed/refima/config"
+import "github.com/xalabs/refima/config"
 
 type Kernel struct {
 	Config config.Config

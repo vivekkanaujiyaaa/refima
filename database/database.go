@@ -4,10 +4,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PumpkinSeed/refima/config"
 	"github.com/PumpkinSeed/tuid"
 	"github.com/RichardKnop/uuid"
 	"github.com/jinzhu/gorm"
+	"github.com/xalabs/refima/config"
 )
 
 type Operation struct {

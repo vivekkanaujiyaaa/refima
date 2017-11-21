@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/PumpkinSeed/refima/config"
 	"github.com/labstack/gommon/log"
 	logging "github.com/sirupsen/logrus"
+	"github.com/xalabs/refima/config"
 )
 
 type Server struct {
