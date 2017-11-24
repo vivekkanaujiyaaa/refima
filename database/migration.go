@@ -2,6 +2,10 @@ package database
 
 import "github.com/xalabs/refima/config"
 
+type MigrationInterface interface {
+	Migrate(cnf config.Config) error
+}
+
 func Migrate(conf config.Config) error {
 	db, err := connection(conf)
 	if err != nil {
