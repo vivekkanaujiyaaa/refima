@@ -16,10 +16,9 @@ type SQLHandler struct {
 	DB   *sql.DB
 }
 
-func NewSQLService(db *sql.DB, conf config.Config) ServiceInterface {
+func NewSQLService(conf config.Config) ServiceInterface {
 	return &SQLService{
 		Conf: conf,
-		DB:   db,
 	}
 }
 
