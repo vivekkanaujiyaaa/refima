@@ -1,15 +1,16 @@
 package database
 
-import "github.com/xalabs/refima/config"
+import "github.com/xalabs/refima/database/models"
 
 type ServiceInterface interface {
-	NewHandler(conf config.Config) HandlerInterface
+	NewHandler(connection string) HandlerInterface
 }
 
 type HandlerInterface interface {
-	NewUser(name, password string) error
-	GetUser(u User) (User, error)
-	UpdateUser(u User) error
-	Authorization(name, password string) (AccessToken, error)
-	GetAccessToken(a AccessToken) (AccessToken, error)
+	NewUser(name, password, systemUser string) error
+	GetUser(u models.User) (*models.User, error)
+	UpdateUser(u models.User) error
+	Authorization(name, password string) (*models.AccessToken, error)
+	GetAccessToken(a models.AccessToken) (*models.AccessToken, error)
+	Migrate() error
 }

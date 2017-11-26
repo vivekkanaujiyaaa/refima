@@ -6,16 +6,10 @@ import (
 )
 
 type Config struct {
-	Test      string   `json:"test"`
-	Listening string   `json:"listening"`
-	LogFile   string   `json:"log_file"`
-	DebugMode bool     `json:"debug_mode"`
-	Database  Database `json:"database"`
-}
-
-type Database struct {
-	Dialect    string `json:"dialect"`
-	Connection string `json:"connection"`
+	Test      string `json:"test"`
+	Listening string `json:"listening"`
+	LogFile   string `json:"log_file"`
+	DebugMode bool   `json:"debug_mode"`
 }
 
 func Get(path string) (Config, error) {
