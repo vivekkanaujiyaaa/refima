@@ -7,39 +7,40 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/xalabs/refima/config"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/xalabs/refima/database/models"
 )
 
 type SQLService struct {
-	Conf config.Config
+	Engine     string
+	Connection string
 }
 
 type SQLHandler struct {
-	Conf config.Config
-	DB   *sql.DB
+	DB *sql.DB
 }
 
-func NewSQLService(conf config.Config) ServiceInterface {
+func NewSQLService(engine, connection string) ServiceInterface {
 	return &SQLService{
-		Conf: conf,
+		Engine:     engine,
+		Connection: connection,
 	}
 }
 
-func (s *SQLService) NewHandler(connection string) HandlerInterface {
-
-	db, _ := sql.Open("mysql", connection)
-	// @todo, change mysql to variable
-	// @todo, handle error
+func (s *SQLService) NewHandler() (HandlerInterface, error) {
+	db, err := sql.Open(s.Engine, s.Connection)
+	if err != nil {
+		return nil, err
+	}
 
 	return &SQLHandler{
-		Conf: s.Conf,
-		DB:   db,
-	}
+		DB: db,
+	}, nil
 }
 
 func (s *SQLHandler) NewUser(name, password, systemUser string) error {
 	stmt, err := s.DB.Prepare("INSERT INTO users(id, name, password, system_user) VALUES(?,?,?,?)")
+	// @todo add support for Postgres and Oracle
 	if err != nil {
 		return err
 	}
@@ -64,6 +65,7 @@ func (s *SQLHandler) NewUser(name, password, systemUser string) error {
 func (s *SQLHandler) GetUser(u models.User) (*models.User, error) {
 	rows, err := s.DB.Query("SELECT id, name, password, system_user FROM users WHERE id = ?", u.ID)
 	// @todo get user by id OR name OR system_user
+	// @todo add support for Postgres and Oracle
 	if err != nil {
 		return nil, err
 	}

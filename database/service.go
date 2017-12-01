@@ -3,7 +3,7 @@ package database
 import "github.com/xalabs/refima/database/models"
 
 type ServiceInterface interface {
-	NewHandler(connection string) HandlerInterface
+	NewHandler() (HandlerInterface, error)
 }
 
 type HandlerInterface interface {
